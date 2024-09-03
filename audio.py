@@ -1,5 +1,7 @@
 import librosa
+import torch
 import torch.nn as nn
+import numpy as np
 
 # Load and process audio data
 audio_data, sr = librosa.load(audio_path)
@@ -18,3 +20,5 @@ class AudioLSTM(nn.Module):
 
 audio_model = AudioLSTM(input_size=mfccs.shape[1], hidden_size=128, num_classes=num_classes)
 audio_embedding = audio_model(torch.Tensor(mfccs).unsqueeze(0))
+audio_embedding_np = audio_embedding.detach().cpu().numpy()
+np.save('audio_embedding.npy', audio_embedding_np)

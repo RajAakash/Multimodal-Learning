@@ -1,4 +1,18 @@
+import torch
 import torch.nn.functional as F
+import numpy as np
+import torch.nn as nn
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
+
+# Load the embeddings from the files
+text_embeddings_np = np.load('text_embeddings.npy')
+image_embedding_np = np.load('image_embedding.npy')
+audio_embedding_np = np.load('audio_embedding.npy')
+
+# Convert NumPy arrays back to PyTorch tensors
+text_embeddings = torch.tensor(text_embeddings_np)
+image_embedding = torch.tensor(image_embedding_np)
+audio_embedding = torch.tensor(audio_embedding_np)
 
 # Concatenate embeddings
 combined_embedding = torch.cat((text_embeddings, image_embedding, audio_embedding), dim=1)
@@ -17,7 +31,6 @@ for epoch in range(num_epochs):
     loss.backward()
     optimizer.step()
 
-from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 
 test_predictions = fc(test_combined_embeddings)
 accuracy = accuracy_score(test_labels, test_predictions.argmax(dim=1))
